@@ -51,12 +51,12 @@ func SortByDeadline(ascending bool) GetTodosOption {
 		if ascending {
 			// Sort in ascending order
 			sort.Slice(todos, func(i, j int) bool {
-				return todos[i].Deadline.Before(todos[j].Deadline)
+				return todos[i].deadline.Before(todos[j].deadline)
 			})
 		} else {
 			// Sort in descending order
 			sort.Slice(todos, func(i, j int) bool {
-				return todos[i].Deadline.After(todos[j].Deadline)
+				return todos[i].deadline.After(todos[j].deadline)
 			})
 		}
 		return todos
@@ -69,12 +69,12 @@ func SortByCreatedAt(ascending bool) GetTodosOption {
 		if ascending {
 			// Sort in ascending order
 			sort.Slice(todos, func(i, j int) bool {
-				return todos[i].CreatedAt.Before(todos[j].CreatedAt)
+				return todos[i].createdAt.Before(todos[j].createdAt)
 			})
 		} else {
 			// Sort in descending order
 			sort.Slice(todos, func(i, j int) bool {
-				return todos[i].CreatedAt.After(todos[j].CreatedAt)
+				return todos[i].createdAt.After(todos[j].createdAt)
 			})
 		}
 		return todos

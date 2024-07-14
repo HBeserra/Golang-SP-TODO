@@ -8,12 +8,12 @@ import (
 )
 
 type Todo struct {
-	ID        int       `json:"id"`
-	Title     string    `json:"title"`
-	Category  string    `json:"category"`
-	Completed bool      `json:"completed"`
-	Deadline  time.Time `json:"deadline"`
-	CreatedAt time.Time `json:"createdAt"`
+	ID        int    `json:"id"`
+	Title     string `json:"title"`
+	Category  string `json:"category"`
+	Completed bool   `json:"completed"`
+	deadline  time.Time
+	createdAt time.Time
 }
 
 type TodoApp struct {
@@ -29,14 +29,14 @@ func NewTodoApp() *TodoApp {
 				Title:     "Buy groceries",
 				Category:  "Personal",
 				Completed: true,
-				CreatedAt: time.Now(),
+				createdAt: time.Now(),
 			},
 			{
 				ID:        3,
 				Title:     "Clean the house",
 				Category:  "",
 				Completed: false,
-				CreatedAt: time.Now(),
+				createdAt: time.Now(),
 			},
 		},
 		categories: []string{
@@ -53,7 +53,7 @@ func (app *TodoApp) AddTodo(title string) int {
 		ID:        len(app.todos) + 1, // Simple ID generation
 		Title:     title,
 		Completed: false,
-		CreatedAt: time.Now(),
+		createdAt: time.Now(),
 	}
 	app.todos = append(app.todos, newTodo)
 	slog.Info("new todo added", "id", newTodo.ID, "title", newTodo.Title)
@@ -127,7 +127,27 @@ func (app *TodoApp) UpdateTodo(id int, title string, category string, completed 
 	todo.Title = title
 	todo.Category = category
 	todo.Completed = completed
-	todo.Deadline = deadline
+	todo.deadline = deadline
+	return nil
+}
+
+// UpdateTodoCategory
+func (app *TodoApp) UpdateTodoCategory(id int, category string) error {
+	todo, err := app.GetTodoByID(id)
+	if err != nil {
+		return err
+	}
+	todo.Category = category
+	return nil
+}
+
+// UpdateTodoDeadline
+func (app *TodoApp) UpdateTodoDeadline(id int, deadline time.Time) error {
+	todo, err := app.GetTodoByID(id)
+	if err != nil {
+		return err
+	}
+	todo.deadline = deadline
 	return nil
 }
 

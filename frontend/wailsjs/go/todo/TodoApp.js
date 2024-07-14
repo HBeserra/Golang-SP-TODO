@@ -53,3 +53,11 @@ export function TogleTodoCompleted(arg1) {
 export function UpdateTodo(arg1, arg2, arg3, arg4, arg5) {
   return window['go']['todo']['TodoApp']['UpdateTodo'](arg1, arg2, arg3, arg4, arg5);
 }
+
+export function UpdateTodoCategory(arg1, arg2) {
+  return window['go']['todo']['TodoApp']['UpdateTodoCategory'](arg1, arg2);
+}
+
+export function UpdateTodoDeadline(arg1, arg2) {
+  return window['go']['todo']['TodoApp']['UpdateTodoDeadline'](arg1, arg2);
+}

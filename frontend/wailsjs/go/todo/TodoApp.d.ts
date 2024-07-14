@@ -28,3 +28,7 @@ export function MarkTodoUncompleted(arg1:number):Promise<void>;
 export function TogleTodoCompleted(arg1:number):Promise<void>;
 
 export function UpdateTodo(arg1:number,arg2:string,arg3:string,arg4:boolean,arg5:time.Time):Promise<void>;
+
+export function UpdateTodoCategory(arg1:number,arg2:string):Promise<void>;
+
+export function UpdateTodoDeadline(arg1:number,arg2:time.Time):Promise<void>;
