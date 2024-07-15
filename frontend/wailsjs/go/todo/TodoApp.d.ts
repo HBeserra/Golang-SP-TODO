@@ -7,6 +7,8 @@ export function AddCategory(arg1:string):Promise<void>;
 
 export function AddTodo(arg1:string):Promise<number>;
 
+export function DeleteAllTodos():Promise<void>;
+
 export function DeleteCategory(arg1:string):Promise<void>;
 
 export function DeleteTodo(arg1:number):Promise<void>;
@@ -31,4 +33,10 @@ export function UpdateTodo(arg1:number,arg2:string,arg3:string,arg4:boolean,arg5
 
 export function UpdateTodoCategory(arg1:number,arg2:string):Promise<void>;
 
+export function UpdateTodoCompleted(arg1:number,arg2:boolean):Promise<void>;
+
 export function UpdateTodoDeadline(arg1:number,arg2:time.Time):Promise<void>;
+
+export function UpdateTodoDescription(arg1:number,arg2:string):Promise<void>;
+
+export function UpdateTodoTitle(arg1:number,arg2:string):Promise<void>;

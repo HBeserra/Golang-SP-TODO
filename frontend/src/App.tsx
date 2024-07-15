@@ -1,180 +1,54 @@
+// src/App.tsx
 import React from "react";
 import {
   GetCategories,
   GetTodos,
   AddCategory,
   AddTodo,
-  TogleTodoCompleted,
-  DeleteCategory,
-  UpdateTodoCategory,
-  DeleteTodo,
 } from "../wailsjs/go/todo/TodoApp";
-import { todo } from "wailsjs/go/models";
-import { Chip, Button, Input, Divider, Checkbox } from "@nextui-org/react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./components/ui/dropdown-menu";
-export function DropdownMenuRadioGroupDemo() {
-  const [position, setPosition] = React.useState("bottom");
 
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>...</DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>Panel Position</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
-          <DropdownMenuRadioItem value="top">Top</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="bottom">Bottom</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="right">Right</DropdownMenuRadioItem>
-        </DropdownMenuRadioGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
+import { Input, Divider, Button } from "@nextui-org/react";
+import Category from "./components/Category";
+import Todo from "./components/Todo";
+import { todo } from "wailsjs/go/models";
+import EditTodo from "./components/EditTodo";
+
+export interface AppState {
+  categories: string[];
+  todos: todo.Todo[];
+  newTodoTitle: string;
+  selectedCategory: string | null;
+  newCategoryTitle: string;
+  editTodo: todo.Todo | null;
 }
 
 function App() {
-  const [categories, setCategories] = React.useState<string[]>([]);
-  const [todos, setTodos] = React.useState<todo.Todo[]>([]);
-  const [newTodoTitle, setNewTodoTitle] = React.useState<string>("");
-  const [selectedCategory, setSelectedCategory] = React.useState<string | null>(
-    null
-  );
-  const [newCategoryTitle, setNewCategoryTitle] = React.useState<string>("");
+  const [state, setState] = React.useState<AppState>({
+    categories: [],
+    todos: [],
+    newTodoTitle: "",
+    selectedCategory: null,
+    newCategoryTitle: "",
+    editTodo: null,
+  });
 
   // Update func
   const SyncApp = () => {
     GetTodos().then((todos) => {
-      setTodos(todos);
+      setState((prevState) => ({ ...prevState, todos }));
     });
 
     GetCategories().then((categories) => {
-      setCategories(categories);
+      setState((prevState) => ({ ...prevState, categories }));
     });
 
-    if (selectedCategory) {
-      if (!categories.includes(selectedCategory)) {
-        setSelectedCategory(null);
+    if (state.selectedCategory) {
+      if (!state.categories.includes(state.selectedCategory)) {
+        setState((prevState) => ({ ...prevState, selectedCategory: null }));
       }
     }
+
   };
-
-  function Category(category: string, index: number) {
-    return (
-      <li
-        key={index}
-        className={`cursor-pointer p-2 flex items-center justify-between gap-2 rounded-md hover:bg-slate-50 ${
-          selectedCategory === category ? "bg-gray-200" : ""
-        }`}
-        onClick={() => setSelectedCategory(category)}
-      >
-        {category}
-        <DropdownMenu>
-          <DropdownMenuTrigger>...</DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
-            <DropdownMenuItem>
-              <Button
-                fullWidth
-                className="text-red-600"
-                variant="flat"
-                key="Delete"
-                onClick={() =>
-                  DeleteCategory(category).then(() => {
-                    SyncApp();
-                    setSelectedCategory(null);
-                  })
-                }
-              >
-                Delete
-              </Button>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </li>
-    );
-  }
-  // receives todo
-  function SelectCatagories({ todo }: { todo: todo.Todo }) {
-    return (
-      <DropdownMenu>
-        <DropdownMenuTrigger>
-          <Chip variant="bordered" color={todo.category ? "primary" : "default"}>
-            {todo.category || "+"}
-          </Chip>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-40"> 
-          {categories.map((category) => (
-            <DropdownMenuItem
-              key={category}
-              onClick={() => {
-                let newCat = category;
-                if (category === todo.category) newCat = "";
-                UpdateTodoCategory(todo.id, newCat).then(() => {
-                  SyncApp();
-                });
-              }}
-            >
-              <span className={todo.category === category ? "font-bold" : ""} >{category}</span>
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    );
-  }
-
-  function Todo(todo: todo.Todo, index: number) {
-    return (
-      <li
-        key={index}
-        className="flex hover:bg-slate-50 p-2 rounded-md items-center gap-4 justify-between mb-2"
-      >
-        <Checkbox
-          isSelected={todo.completed}
-          onChange={() => {
-            TogleTodoCompleted(todo.id).then(() => {
-              SyncApp();
-            });
-          }}
-        ></Checkbox>
-        <span
-          className={`text-gray-700 w-full text-left ${
-            todo.completed ? "line-through" : ""
-          }`}
-          onClick={() => {
-            TogleTodoCompleted(todo.id).then(() => {
-              SyncApp();
-            });
-          }}
-        >
-          {todo.title}
-        </span>
-        <SelectCatagories todo={todo} />
-        <DropdownMenu>
-          <DropdownMenuTrigger>...</DropdownMenuTrigger>
-          <DropdownMenuContent className="w-46 gap-4">
-            <DropdownMenuItem>
-              <span className="text-gray-600">Edit</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              key="Delete"
-              onClick={() => DeleteTodo(todo.id).then(() => SyncApp())}
-            >
-              <span className="text-red-600">Delete</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </li>
-    );
-  }
-
-  
 
   React.useEffect(() => {
     SyncApp();
@@ -182,24 +56,54 @@ function App() {
 
   return (
     <div className="container mx-auto p-8 flex h-screen">
+      <EditTodo SyncApp={SyncApp} appState={state} />
       <div className="w-1/4 mr-4 px-[2em] py-[4em]">
         <h2 className="text-xl font-bold mb-2">Categories</h2>
-        {!selectedCategory ? null : (
-          <Button className="mb-5" onClick={() => setSelectedCategory(null)}>
-            {selectedCategory} x
+        {!state.selectedCategory ? null : (
+          <Button
+            className="mb-5"
+            onClick={() =>
+              setState((prevState) => ({
+                ...prevState,
+                selectedCategory: null,
+              }))
+            }
+          >
+            {state.selectedCategory} x
           </Button>
         )}
-        <ul className="gap-2 flex flex-col">{categories.map(Category)}</ul>
+        <ul className="gap-2 flex flex-col">
+          {state.categories.map((category) =>
+            Category({
+              category,
+              selectedCategory: state.selectedCategory,
+              setSelectedCategory: (category) =>
+                setState((prevState) => ({
+                  ...prevState,
+                  selectedCategory: category,
+                })),
+              SyncApp,
+            })
+          )}
+        </ul>
         <div className="mt-2">
           <Input
             placeholder="New Category"
-            value={newCategoryTitle}
-            onChange={(e) => setNewCategoryTitle(e.target.value)}
+            value={state.newCategoryTitle}
+            onChange={(e) =>
+              setState((prevState) => ({
+                ...prevState,
+                newCategoryTitle: e.target.value,
+              }))
+            }
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                AddCategory(newCategoryTitle).then(() => {
+                AddCategory(state.newCategoryTitle).then(() => {
                   SyncApp();
-                  setNewCategoryTitle(""); // Clear the input field after adding
+                  setState((prevState) => ({
+                    ...prevState,
+                    newCategoryTitle: "",
+                  })); // Clear the input field after adding
                 });
               }
             }}
@@ -215,26 +119,32 @@ function App() {
         <div className="my-5">
           <Input
             placeholder="New Todo"
-            value={newTodoTitle}
-            onChange={(e) => setNewTodoTitle(e.target.value)}
+            value={state.newTodoTitle}
+            onChange={(e) =>
+              setState((prevState) => ({
+                ...prevState,
+                newTodoTitle: e.target.value,
+              }))
+            }
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                AddTodo(newTodoTitle).then(() => {
+                AddTodo(state.newTodoTitle).then(() => {
                   SyncApp();
-                  setNewTodoTitle(""); // Clear the input field after adding
+                  setState((prevState) => ({ ...prevState, newTodoTitle: "" })); // Clear the input field after adding
                 });
               }
             }}
           />
         </div>
         <ul className="list-disc">
-          {todos
+          {state.todos
             .filter((todo) =>
-              selectedCategory ? todo.category === selectedCategory : true
+              state.selectedCategory
+                ? todo.category === state.selectedCategory
+                : true
             )
-            .map(Todo)}
+            .map((todo) => Todo({ todo, SyncApp, appState: state }))}
         </ul>
-
       </div>
     </div>
   );

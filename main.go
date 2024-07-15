@@ -1,9 +1,10 @@
 package main
 
 import (
-	"changeme/internal/todo"
 	"embed"
 	"log"
+
+	"github.com/HBeserra/Golang-SP-TODO/internal/todo"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/logger"

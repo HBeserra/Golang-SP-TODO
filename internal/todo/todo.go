@@ -8,17 +8,19 @@ import (
 )
 
 type Todo struct {
-	ID        int    `json:"id"`
-	Title     string `json:"title"`
-	Category  string `json:"category"`
-	Completed bool   `json:"completed"`
-	deadline  time.Time
-	createdAt time.Time
+	ID          int    `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Category    string `json:"category"`
+	Completed   bool   `json:"completed"`
+	deadline    time.Time
+	createdAt   time.Time
 }
 
 type TodoApp struct {
 	todos      []Todo
 	categories []string
+	lastID     int
 }
 
 func NewTodoApp() *TodoApp {
@@ -44,13 +46,15 @@ func NewTodoApp() *TodoApp {
 			"Work",
 			"Home",
 		},
+		lastID: 3,
 	}
 }
 
 // AddTodo adds a new todo item
 func (app *TodoApp) AddTodo(title string) int {
+	app.lastID++
 	newTodo := Todo{
-		ID:        len(app.todos) + 1, // Simple ID generation
+		ID:        app.lastID, // Simple ID generation
 		Title:     title,
 		Completed: false,
 		createdAt: time.Now(),
@@ -133,11 +137,22 @@ func (app *TodoApp) UpdateTodo(id int, title string, category string, completed 
 
 // UpdateTodoCategory
 func (app *TodoApp) UpdateTodoCategory(id int, category string) error {
+	slog.Info("updating todo category", "id", id, "category", category)
 	todo, err := app.GetTodoByID(id)
 	if err != nil {
 		return err
 	}
 	todo.Category = category
+	return nil
+}
+
+// UpdateTodoTitle
+func (app *TodoApp) UpdateTodoTitle(id int, title string) error {
+	todo, err := app.GetTodoByID(id)
+	if err != nil {
+		return err
+	}
+	todo.Title = title
 	return nil
 }
 
@@ -149,6 +164,29 @@ func (app *TodoApp) UpdateTodoDeadline(id int, deadline time.Time) error {
 	}
 	todo.deadline = deadline
 	return nil
+}
+
+func (app *TodoApp) UpdateTodoDescription(id int, description string) error {
+	todo, err := app.GetTodoByID(id)
+	if err != nil {
+		return err
+	}
+	todo.Description = description
+	return nil
+}
+
+func (app *TodoApp) UpdateTodoCompleted(id int, completed bool) error {
+	todo, err := app.GetTodoByID(id)
+	if err != nil {
+		return err
+	}
+	todo.Completed = completed
+	return nil
+}
+
+// DeleteAllTodos removes all todos
+func (app *TodoApp) DeleteAllTodos() {
+	app.todos = []Todo{}
 }
 
 // DeleteTodo removes a todo by its ID
@@ -182,10 +220,18 @@ func (app *TodoApp) GetCategories() []string {
 }
 
 func (app *TodoApp) DeleteCategory(category string) {
+	for _, todo := range app.todos {
+		if todo.Category == category {
+			todo.Category = ""
+			slog.Info("range todos", "todo", todo, "category", todo.Category)
+		}
+	}
+
 	for i, c := range app.categories {
 		if c == category {
 			app.categories = append(app.categories[:i], app.categories[i+1:]...)
-			return
+			break
 		}
 	}
+
 }

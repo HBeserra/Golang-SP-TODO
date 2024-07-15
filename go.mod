@@ -1,4 +1,4 @@
-module changeme
+module github.com/HBeserra/Golang-SP-TODO
 
 go 1.18
 

@@ -10,6 +10,10 @@ export function AddTodo(arg1) {
   return window['go']['todo']['TodoApp']['AddTodo'](arg1);
 }
 
+export function DeleteAllTodos() {
+  return window['go']['todo']['TodoApp']['DeleteAllTodos']();
+}
+
 export function DeleteCategory(arg1) {
   return window['go']['todo']['TodoApp']['DeleteCategory'](arg1);
 }
@@ -58,6 +62,18 @@ export function UpdateTodoCategory(arg1, arg2) {
   return window['go']['todo']['TodoApp']['UpdateTodoCategory'](arg1, arg2);
 }
 
+export function UpdateTodoCompleted(arg1, arg2) {
+  return window['go']['todo']['TodoApp']['UpdateTodoCompleted'](arg1, arg2);
+}
+
 export function UpdateTodoDeadline(arg1, arg2) {
   return window['go']['todo']['TodoApp']['UpdateTodoDeadline'](arg1, arg2);
+}
+
+export function UpdateTodoDescription(arg1, arg2) {
+  return window['go']['todo']['TodoApp']['UpdateTodoDescription'](arg1, arg2);
+}
+
+export function UpdateTodoTitle(arg1, arg2) {
+  return window['go']['todo']['TodoApp']['UpdateTodoTitle'](arg1, arg2);
 }
