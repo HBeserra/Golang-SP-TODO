@@ -22,8 +22,6 @@ var icon []byte
 
 func main() {
 	// Create an instance of the app structure
-	app := NewApp()
-
 	todoApp := todo.NewTodoApp()
 
 	// Create application with options
@@ -47,13 +45,8 @@ func main() {
 		Menu:             nil,
 		Logger:           nil,
 		LogLevel:         logger.DEBUG,
-		OnStartup:        app.startup,
-		OnDomReady:       app.domReady,
-		OnBeforeClose:    app.beforeClose,
-		OnShutdown:       app.shutdown,
 		WindowStartState: options.Normal,
 		Bind: []interface{}{
-			app,
 			todoApp,
 		},
 		// Windows platform specific options

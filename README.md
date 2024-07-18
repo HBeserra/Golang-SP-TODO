@@ -1,40 +1,57 @@
 # README
 
-## About
+Este projeto demonstra a criação de um aplicativo de tarefas simples ("Todo App") utilizando a biblioteca Wails em Golang. O Wails permite a construção de apps desktop multiplataforma com Go e tecnologias web, oferecendo uma alternativa leve e rápida ao Electron.
 
-This template comes with Vite, React, TypeScript, TailwindCSS and shadcn/ui.
 
-Built with `Wails v2.5.1` and [shadcn's CLI](https://ui.shadcn.com/docs/cli)
+### Comandos:
 
-### Using the Template
-```console
-wails init -n project-name -t https://github.com/Mahcks/wails-vite-react-tailwind-shadcnui-ts
+- `wails`: Este comando é usado para interagir com o CLI do Wails. Ele oferece várias opções, como construir a aplicação, iniciar o servidor de desenvolvimento e executar testes.
+
+- `wails dev`: Este comando inicia o ambiente de desenvolvimento do Wails, que permite que você veja as alterações no código em tempo real.
+- `wails build`: Este comando compila sua aplicação Wails para um executável.
+
+### Estrutura do projeto
+```
+├── frontend
+│   └── src
+│       └── main.tsx
+├── internal
+|   └── ...
+├── main.go
+└── wails.json
+
 ```
 
-```console
-cd frontend
+### Dependências:
+
+- [Wails](https://wails.io/)
+
+### Instalação:
+
+```sh
+go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+cd frontend && npm install
+cd ..
 ```
 
-```console
-npm install
+### Construção:
+
+```sh
+wails build
 ```
 
-### Installing Components
-To install components, use shadcn's CLI tool to install
+### Execução:
 
-More info here: https://ui.shadcn.com/docs/cli#add
-
-Example:
-```console
-npx shadcn-ui@latest add [component]
+No Linux:
+```sh
+chmod +x build/bin/go-todo
+./build/bin/go-todo
 ```
 
-## Live Development
 
-To run in live development mode, run `wails dev` in the project directory. In another terminal, go into the `frontend`
-directory and run `npm run dev`. The frontend dev server will run on http://localhost:34115. Connect to this in your
-browser and connect to your application.
 
-## Building
+### Recursos:
 
-To build a redistributable, production mode package, use `wails build`.
+- [Documentação do Wails](https://wails.io/docs/introduction)
+- [Exemplos do Wails](https://github.com/wailsapp/awesome-wails)
